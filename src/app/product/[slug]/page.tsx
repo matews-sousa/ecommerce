@@ -1,8 +1,13 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 import Image from "next/image";
 import React from "react";
 
 export default function ProductPage({ params }: { params: { slug: string } }) {
+  const cart = useCart();
+
   return (
     <div className="grid grid-cols-3 gap-10">
       <div className="cols-span-1">
@@ -27,7 +32,19 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           use.
         </p>
 
-        <Button size="lg">Add to cart</Button>
+        <Button
+          size="lg"
+          onClick={() =>
+            cart.addProduct({
+              image: "/assets/earphones_a_1.webp",
+              name: "Earphone A1",
+              price: 140,
+              slug: params.slug,
+            })
+          }
+        >
+          Add to cart
+        </Button>
       </div>
     </div>
   );
