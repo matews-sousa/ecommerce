@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "./ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { Minus, Plus } from "lucide-react";
 
 interface ProductProps {
   p: {
@@ -15,7 +16,7 @@ interface ProductProps {
 }
 
 export default function CartItem({ p }: ProductProps) {
-  const { removeProduct } = useCart();
+  const { removeProduct, incrementQuantity } = useCart();
 
   return (
     <div className="grid grid-cols-3 gap-4 px-2">
@@ -33,7 +34,27 @@ export default function CartItem({ p }: ProductProps) {
         </div>
 
         <div className="flex items-center justify-between">
-          <p>Qty: {p.quantity}</p>
+          <div className="flex items-center">
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-r-none"
+              onClick={() => incrementQuantity(p.id, -1)}
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+            <div className="flex w-6 items-center justify-center self-stretch border-b border-t border-gray-200">
+              {p.quantity}
+            </div>
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-l-none"
+              onClick={() => incrementQuantity(p.id, 1)}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
           <Button
             variant="link"
             className="text-red-400"

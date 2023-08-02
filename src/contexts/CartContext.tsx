@@ -18,6 +18,7 @@ interface CartContextProps {
   totalPrice: number;
   addProduct: (id: number) => void;
   removeProduct: (id: number) => void;
+  incrementQuantity: (id: number, quantity: number) => void;
 }
 
 const CartContext = createContext<CartContextProps>({} as CartContextProps);
@@ -68,6 +69,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCart((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const incrementQuantity = (id: number, quantity: number) => {
+    const product = cart.find((p) => p.id === id);
+
+    if (!product) return;
+
+    if (product?.quantity + quantity <= 0) {
+      removeProduct(id);
+      return;
+    }
+
+    setCart((prev) => {
+      return prev.map((p) => {
+        if (p.id === id) {
+          return {
+            ...p,
+            quantity: p.quantity + quantity,
+          };
+        }
+        return p;
+      });
+    });
+  };
+
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
@@ -80,6 +104,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalPrice,
         addProduct,
         removeProduct,
+        incrementQuantity,
       }}
     >
       {children}
