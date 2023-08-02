@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 
 interface ProductProps {
   p: {
+    id: number;
     image: string;
     name: string;
     slug: string;
@@ -17,7 +18,7 @@ export default function CartItem({ p }: ProductProps) {
   const { removeProduct } = useCart();
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-4 px-2">
       <Image
         src={p.image}
         width={500}
@@ -36,7 +37,7 @@ export default function CartItem({ p }: ProductProps) {
           <Button
             variant="link"
             className="text-red-400"
-            onClick={() => removeProduct(p)}
+            onClick={() => removeProduct(p.id)}
           >
             Remove
           </Button>

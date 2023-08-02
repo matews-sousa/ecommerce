@@ -3,6 +3,7 @@ import Link from "next/link";
 
 interface ProductProps {
   product: {
+    id: number;
     image: string;
     name: string;
     slug: string;
@@ -11,10 +12,10 @@ interface ProductProps {
 }
 
 export default function Product({
-  product: { image, name, slug, price },
+  product: { id, image, name, slug, price },
 }: ProductProps) {
   return (
-    <Link href={`product/${slug}`} className="group cursor-pointer">
+    <Link href={`product/${id}`} className="group cursor-pointer">
       <div className="w-full overflow-hidden rounded-lg bg-gray-200">
         <Image
           src={image}
