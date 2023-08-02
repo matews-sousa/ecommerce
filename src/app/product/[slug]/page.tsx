@@ -1,16 +1,19 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { products } from "@/constants/products";
-import { useCart } from "@/contexts/CartContext";
+import { IProduct } from "@/types/product";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { client } from "../../../../sanity/lib/client";
+import { groq } from "next-sanity";
+import { urlForImage } from "../../../../sanity/lib/image";
+import AddToCartBtn from "@/components/add-to-cart-btn";
 
-export default function ProductPage({ params }: { params: { slug: number } }) {
-  const cart = useCart();
-  const product = products.find((p) => p.id === Number(params.slug));
-
-  console.log(products, product);
+export default async function ProductPage({
+  params,
+}: {
+  params: { slug: number };
+}) {
+  const product = await client.fetch<IProduct>(
+    groq`*[slug.current == "${params.slug}"][0]`
+  );
 
   if (!product) return <h1>Not found</h1>;
 
@@ -19,7 +22,7 @@ export default function ProductPage({ params }: { params: { slug: number } }) {
       <div className="cols-span-1 mb-4">
         <div className="bg-gray-200">
           <Image
-            src={product.image}
+            src={urlForImage(product.images[0]).url()}
             width={1000}
             height={1000}
             alt="earphone"
@@ -42,9 +45,7 @@ export default function ProductPage({ params }: { params: { slug: number } }) {
           use.
         </p>
 
-        <Button size="lg" onClick={() => cart.addProduct(product.id)}>
-          Add to cart
-        </Button>
+        <AddToCartBtn _id={product._id} />
       </div>
     </div>
   );

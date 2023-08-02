@@ -1,24 +1,20 @@
+import { IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
+import { urlForImage } from "../../sanity/lib/image";
 
 interface ProductProps {
-  product: {
-    id: number;
-    image: string;
-    name: string;
-    slug: string;
-    price: number;
-  };
+  product: IProduct;
 }
 
 export default function Product({
-  product: { id, image, name, slug, price },
+  product: { _id, images, name, slug, price },
 }: ProductProps) {
   return (
-    <Link href={`product/${id}`} className="group cursor-pointer">
+    <Link href={`product/${slug}`} className="group cursor-pointer">
       <div className="w-full overflow-hidden rounded-lg bg-gray-200">
         <Image
-          src={image}
+          src={urlForImage(images[0]).url()}
           width={500}
           height={500}
           alt={name}

@@ -40,10 +40,10 @@ export default function Cart() {
         </SheetHeader>
         <ScrollArea className="mt-4 flex h-[65vh] flex-col gap-4">
           {cart.map((p, i) => (
-            <>
+            <div key={p.name}>
               {i !== 0 && <Separator className="my-4" />}
-              <CartItem key={p.name} p={p} />
-            </>
+              <CartItem p={p} />
+            </div>
           ))}
         </ScrollArea>
         <Separator className="my-4" />
