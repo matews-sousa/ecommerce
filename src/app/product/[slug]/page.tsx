@@ -1,6 +1,5 @@
 import { IProduct } from "@/types/product";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
 import { client } from "../../../../sanity/lib/client";
 import { groq } from "next-sanity";
 import { urlForImage } from "../../../../sanity/lib/image";
@@ -37,15 +36,9 @@ export default async function ProductPage({
           ${product.price}
         </p>
 
-        <p className="md:text-md my-4 text-sm">
-          The Zip Tote Basket is the perfect midpoint between shopping tote and
-          comfy backpack. With convertible straps, you can hand carry, should
-          sling, or backpack this convenient and spacious bag. The zip top and
-          durable canvas construction keeps your goods protected for all-day
-          use.
-        </p>
+        <p className="md:text-md my-4 text-sm">{product.description}</p>
 
-        <AddToCartBtn _id={product._id} />
+        <AddToCartBtn product={product} />
       </div>
     </div>
   );

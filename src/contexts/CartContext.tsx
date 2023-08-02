@@ -1,24 +1,19 @@
 "use client";
 
-import { products } from "@/constants/products";
+import { IProduct } from "@/types/product";
 import { createContext, useContext, useState, useEffect } from "react";
 
-interface Product {
-  id: number;
-  image: string;
-  name: string;
-  slug: string;
-  price: number;
+type Product = IProduct & {
   quantity: number;
-}
+};
 
 interface CartContextProps {
   cart: Product[];
   cartSize: number;
   totalPrice: number;
-  addProduct: (id: number) => void;
-  removeProduct: (id: number) => void;
-  incrementQuantity: (id: number, quantity: number) => void;
+  addProduct: (id: Omit<Product, "quantity">) => void;
+  removeProduct: (id: string) => void;
+  incrementQuantity: (id: string, quantity: number) => void;
 }
 
 const CartContext = createContext<CartContextProps>({} as CartContextProps);
@@ -28,49 +23,49 @@ export function useCart() {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const storageCart = localStorage.getItem("cart");
-  const [cart, setCart] = useState<Product[]>(
-    storageCart === null ? null : JSON.parse(storageCart)
-  );
-  const cartSize = cart?.reduce((previous, current) => {
-    return previous + current.quantity;
-  }, 0);
-  const totalPrice = parseFloat(
-    cart
-      ?.reduce((prev, curr) => {
-        return prev + curr.price * curr.quantity;
+  const [cart, setCart] = useState<Product[]>(() => {
+    const cartDataFromLocalStorage = localStorage.getItem("cart");
+    return cartDataFromLocalStorage !== null
+      ? JSON.parse(cartDataFromLocalStorage)
+      : [];
+  });
+  const cartSize = cart
+    ? cart?.reduce((previous, current) => {
+        return previous + current.quantity;
       }, 0)
-      .toFixed(2)
-  );
+    : 0;
+  const totalPrice = cart
+    ? parseFloat(
+        cart
+          ?.reduce((prev, curr) => {
+            return prev + curr.price * curr.quantity;
+          }, 0)
+          .toFixed(2)
+      )
+    : 0;
 
-  const addProduct = (id: number) => {
-    const product = products.find((p) => p.id === id);
+  const addProduct = (product: Omit<Product, "quantity">) => {
+    const existingProduct = cart?.find((item) => item._id === product._id);
 
-    if (!product) return;
-
-    if (cart.some((p) => p.id === id)) {
-      setCart((prev) => {
-        return prev.map((pr) => {
-          if (pr.id == product?.id) {
-            return {
-              ...pr,
-              quantity: pr?.quantity + 1,
-            };
-          }
-          return pr;
-        });
-      });
+    if (existingProduct) {
+      setCart((prev) =>
+        prev.map((item) =>
+          item._id === product._id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
     } else {
       setCart((prev) => [...prev, { ...product, quantity: 1 }]);
     }
   };
 
-  const removeProduct = (id: number) => {
-    setCart((prev) => prev.filter((p) => p.id !== id));
+  const removeProduct = (id: string) => {
+    setCart((prev) => prev.filter((p) => p._id !== id));
   };
 
-  const incrementQuantity = (id: number, quantity: number) => {
-    const product = cart.find((p) => p.id === id);
+  const incrementQuantity = (id: string, quantity: number) => {
+    const product = cart.find((p) => p._id === id);
 
     if (!product) return;
 
@@ -81,7 +76,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     setCart((prev) => {
       return prev.map((p) => {
-        if (p.id === id) {
+        if (p._id === id) {
           return {
             ...p,
             quantity: p.quantity + quantity,

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Sheet,
   SheetClose,
@@ -39,10 +38,10 @@ export default function Cart() {
           <SheetTitle>Shopping Cart</SheetTitle>
         </SheetHeader>
         <ScrollArea className="mt-4 flex h-[65vh] flex-col gap-4">
-          {cart.map((p, i) => (
+          {cart?.map((p, i) => (
             <div key={p.name}>
               {i !== 0 && <Separator className="my-4" />}
-              <CartItem p={p} />
+              <CartItem product={p} />
             </div>
           ))}
         </ScrollArea>
