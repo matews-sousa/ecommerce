@@ -28,9 +28,11 @@ export default function Cart() {
           className="relative"
         >
           <ShoppingBag className="h-6 w-6" />
-          <Badge variant="destructive" className="absolute -right-2 top-0">
-            {cartSize}
-          </Badge>
+          {cartSize > 0 && (
+            <Badge variant="destructive" className="absolute -right-2 top-0">
+              {cartSize}
+            </Badge>
+          )}
         </Button>
       </SheetTrigger>
       <SheetContent>
@@ -38,12 +40,19 @@ export default function Cart() {
           <SheetTitle>Shopping Cart</SheetTitle>
         </SheetHeader>
         <ScrollArea className="mt-4 flex h-[65vh] flex-col gap-4">
-          {cart?.map((p, i) => (
-            <div key={p.name}>
-              {i !== 0 && <Separator className="my-4" />}
-              <CartItem product={p} />
-            </div>
-          ))}
+          {cartSize === 0 ? (
+            <h3 className="mt-24 text-center font-medium">
+              You do not have any items. Keep shopping and add some products to
+              your Cart.
+            </h3>
+          ) : (
+            cart?.map((p, i) => (
+              <div key={p.name}>
+                {i !== 0 && <Separator className="my-4" />}
+                <CartItem product={p} />
+              </div>
+            ))
+          )}
         </ScrollArea>
         <Separator className="my-4" />
         <SheetFooter>
@@ -52,7 +61,9 @@ export default function Cart() {
               <p>Subtotal</p>
               <p>${totalPrice}</p>
             </div>
-            <Button className="mt-4 w-full">Checkout</Button>
+            <Button className="mt-4 w-full" disabled={cartSize === 0}>
+              Checkout
+            </Button>
             <p className="text-center">
               or
               <SheetClose asChild>

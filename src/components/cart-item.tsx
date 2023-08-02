@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { Minus, Plus } from "lucide-react";
 import { IProduct } from "@/types/product";
 import { urlForImage } from "../../sanity/lib/image";
+import { Input } from "./ui/input";
 
 interface ProductProps {
   product: IProduct & {
