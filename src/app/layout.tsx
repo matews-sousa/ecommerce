@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { CartProvider } from "@/contexts/CartContext";
 import { usePathname } from "next/navigation";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           <main className={!pathname.startsWith("/studio") ? "px-12 py-6" : ""}>
             {children}
           </main>
+          <Toaster />
         </CartProvider>
       </body>
     </html>
