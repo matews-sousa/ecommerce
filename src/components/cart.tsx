@@ -8,15 +8,36 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Button } from "./ui/button";
-import { ShoppingBag, MoveRight } from "lucide-react";
+import { ShoppingBag, MoveRight, Loader2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { Separator } from "./ui/separator";
 import { Badge } from "./ui/badge";
 import CartItem from "./cart-item";
 import { ScrollArea } from "./ui/scroll-area";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Cart() {
   const { cart, cartSize, totalPrice } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const checkout = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        body: JSON.stringify(cart),
+      });
+      const data = await response.json();
+
+      setIsLoading(false);
+      router.push(data.url);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <Sheet>
@@ -61,7 +82,12 @@ export default function Cart() {
               <p>Subtotal</p>
               <p>${totalPrice}</p>
             </div>
-            <Button className="mt-4 w-full" disabled={cartSize === 0}>
+            <Button
+              className="mt-4 w-full"
+              disabled={cartSize === 0 || isLoading}
+              onClick={checkout}
+            >
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Checkout
             </Button>
             <p className="text-center">

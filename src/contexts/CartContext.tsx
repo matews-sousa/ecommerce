@@ -3,17 +3,18 @@
 import { IProduct } from "@/types/product";
 import { createContext, useContext, useState, useEffect } from "react";
 
-type Product = IProduct & {
+export type CartProduct = IProduct & {
   quantity: number;
 };
 
 interface CartContextProps {
-  cart: Product[];
+  cart: CartProduct[];
   cartSize: number;
   totalPrice: number;
-  addProduct: (id: Omit<Product, "quantity">) => void;
+  addProduct: (id: Omit<CartProduct, "quantity">) => void;
   removeProduct: (id: string) => void;
   incrementQuantity: (id: string, quantity: number) => void;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextProps>({} as CartContextProps);
@@ -23,7 +24,7 @@ export function useCart() {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<Product[]>(() => {
+  const [cart, setCart] = useState<CartProduct[]>(() => {
     const cartDataFromLocalStorage = localStorage.getItem("cart");
     return cartDataFromLocalStorage !== null
       ? JSON.parse(cartDataFromLocalStorage)
@@ -44,7 +45,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       )
     : 0;
 
-  const addProduct = (product: Omit<Product, "quantity">) => {
+  const addProduct = (product: Omit<CartProduct, "quantity">) => {
     const existingProduct = cart?.find((item) => item._id === product._id);
 
     if (existingProduct) {
@@ -87,6 +88,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const clearCart = () => {
+    setCart([]);
+  };
+
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
@@ -100,6 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         addProduct,
         removeProduct,
         incrementQuantity,
+        clearCart,
       }}
     >
       {children}
