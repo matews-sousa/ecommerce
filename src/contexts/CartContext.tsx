@@ -25,10 +25,14 @@ export function useCart() {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartProduct[]>(() => {
-    const cartDataFromLocalStorage = localStorage.getItem("cart");
-    return cartDataFromLocalStorage !== null
-      ? JSON.parse(cartDataFromLocalStorage)
-      : [];
+    if (typeof window !== "undefined") {
+      const cartDataFromLocalStorage = localStorage.getItem("cart");
+      return cartDataFromLocalStorage !== null
+        ? JSON.parse(cartDataFromLocalStorage)
+        : [];
+    }
+
+    return [];
   });
   const cartSize = cart
     ? cart?.reduce((previous, current) => {

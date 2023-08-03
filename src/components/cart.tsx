@@ -41,7 +41,7 @@ export default function Cart() {
 
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
