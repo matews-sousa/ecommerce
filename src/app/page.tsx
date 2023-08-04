@@ -10,19 +10,21 @@ interface Props {
     date?: string;
     price?: string;
     category?: string;
+    search?: string;
   };
 }
 
 export default async function Home({ searchParams }: Props) {
-  const { price, date, category } = searchParams;
+  const { price, date, category, search } = searchParams;
   const priceOrder = price ? `| order(price ${price})` : "";
   const dateOrder = date ? `| order(_createdAt ${date})` : "";
   const order = `${priceOrder}${dateOrder}`;
   const filter = category ? `&& category->slug.current == "${category}"` : "";
+  const searchFilter = search ? `&& name match "${search}*"` : "";
 
   const products = await client.fetch<
     IProduct[]
-  >(groq`*[_type == "product" ${filter}] ${order} {
+  >(groq`*[_type == "product" ${filter}${searchFilter}] ${order} {
     _id,
     _createdAt,
     name,
