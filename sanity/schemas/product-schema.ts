@@ -29,10 +29,10 @@ export const product = defineType({
       title: "Price",
     },
     {
-      name: "categories",
-      type: "array",
-      of: [{ type: "string" }],
-      title: "Categories",
+      title: "Category",
+      name: "category",
+      type: "reference",
+      to: [{ type: "category" }],
     },
     {
       name: "images",
