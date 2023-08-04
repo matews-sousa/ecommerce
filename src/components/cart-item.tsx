@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "./ui/button";
 import { useCart } from "@/contexts/CartContext";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { IProduct } from "@/types/product";
 import { urlForImage } from "../../sanity/lib/image";
 import { Input } from "./ui/input";
@@ -58,11 +58,13 @@ export default function CartItem({ product }: ProductProps) {
             </Button>
           </div>
           <Button
-            variant="link"
+            size="icon"
+            variant="ghost"
             className="text-red-400"
             onClick={() => removeProduct(product._id)}
+            aria-label="Remove item"
           >
-            Remove
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       </div>
