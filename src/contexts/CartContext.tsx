@@ -34,11 +34,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     return [];
   });
-  const cartSize = cart
-    ? cart?.reduce((previous, current) => {
-        return previous + current.quantity;
-      }, 0)
-    : 0;
+  const cartSize = cart?.reduce((previous, current) => {
+    return previous + current.quantity;
+  }, 0);
   const totalPrice = cart
     ? parseFloat(
         cart

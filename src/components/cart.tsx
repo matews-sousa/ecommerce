@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sheet,
   SheetClose,
@@ -11,15 +13,15 @@ import { Button } from "./ui/button";
 import { ShoppingBag, MoveRight, Loader2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { Separator } from "./ui/separator";
-import { Badge } from "./ui/badge";
 import CartItem from "./cart-item";
 import { ScrollArea } from "./ui/scroll-area";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Cart() {
-  const { cart, cartSize, totalPrice } = useCart();
+  const { cart, cartSize, totalPrice, clearCart } = useCart();
   const [isLoading, setIsLoading] = useState(false);
+  const [cSize, setCSize] = useState(0);
   const router = useRouter();
 
   const checkout = async () => {
@@ -39,40 +41,45 @@ export default function Cart() {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    setCSize(cartSize);
+  }, [cartSize]);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Shopping Cart"
-          className="relative"
-        >
+        <Button variant="ghost">
           <ShoppingBag className="h-6 w-6" />
-          {cartSize > 0 && (
-            <Badge variant="destructive" className="absolute -right-2 top-0">
-              {cartSize}
-            </Badge>
-          )}
+          <span className="ml-2 text-sm font-bold">{cSize}</span>
+          <span className="sr-only">Cart</span>
         </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Shopping Cart</SheetTitle>
         </SheetHeader>
-        <ScrollArea className="mt-4 flex h-[65vh] flex-col gap-4">
+        <ScrollArea className="mt-4 flex h-[62vh] flex-col gap-4">
           {cartSize === 0 ? (
             <h3 className="mt-24 text-center font-medium">
               You do not have any items. Keep shopping and add some products to
               your Cart.
             </h3>
           ) : (
-            cart?.map((p, i) => (
-              <div key={p.name}>
-                {i !== 0 && <Separator className="my-4" />}
-                <CartItem product={p} />
-              </div>
-            ))
+            <>
+              {cart?.map((p, i) => (
+                <div key={p.name}>
+                  {i !== 0 && <Separator className="my-4" />}
+                  <CartItem product={p} />
+                </div>
+              ))}
+              <Button
+                variant="destructive"
+                className="mt-4 w-full"
+                onClick={clearCart}
+              >
+                Clear cart
+              </Button>
+            </>
           )}
         </ScrollArea>
         <Separator className="my-4" />
@@ -82,8 +89,12 @@ export default function Cart() {
               <p>Subtotal</p>
               <p>${totalPrice}</p>
             </div>
+            <p className="my-2 text-center text-xs text-red-400">
+              The payment will not be real, use 4242 4242 4242 4242 as the
+              credit card fields.
+            </p>
             <Button
-              className="mt-4 w-full"
+              className="w-full"
               disabled={cartSize === 0 || isLoading}
               onClick={checkout}
             >

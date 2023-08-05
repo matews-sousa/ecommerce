@@ -4,6 +4,7 @@ import { groq } from "next-sanity";
 import { ICategory, IProduct } from "@/types/product";
 import Header from "@/components/header";
 import Filters from "@/components/filters";
+import SearchBar from "@/components/search-bar";
 
 interface Props {
   searchParams: {
@@ -48,6 +49,9 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <>
+      <div className="inline-flex w-full justify-center lg:hidden">
+        <SearchBar />
+      </div>
       <Header productsCount={products.length} />
       <div className="grid grid-cols-1 space-y-4 md:grid-cols-5 md:gap-4">
         <Filters categories={categories} />

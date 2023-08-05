@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "audiophile",
-  description: "A ECommerce for audio related products.",
+  description: "An E-Commerce for audio related products.",
 };
 
 export default function RootLayout({
