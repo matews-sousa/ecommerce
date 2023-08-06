@@ -35,6 +35,17 @@ export const product = defineType({
       to: [{ type: "category" }],
     },
     {
+      title: "Sizes",
+      name: "sizes",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "size" }],
+        },
+      ],
+    },
+    {
       name: "images",
       type: "array",
       of: [{ type: "image" }],

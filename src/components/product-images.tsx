@@ -15,7 +15,7 @@ export default function ProductImages({ images, name }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="w-full overflow-hidden bg-gray-200">
+      <div className="h-96 w-full overflow-hidden bg-gray-200">
         <NextImage
           src={urlForImage(currentImage).url()}
           width={1000}
@@ -24,14 +24,14 @@ export default function ProductImages({ images, name }: Props) {
           className="h-full w-full object-cover object-center"
         />
       </div>
-      <div className="flex gap-4">
+      <div className="grid grid-cols-4 gap-4">
         {images.map((image) => (
           <button
             key={image.asset?._key}
             className={
               currentImage === image
-                ? "rounded-md ring ring-blue-500"
-                : "cursor-pointer opacity-50 hover:opacity-100"
+                ? "col-span-1 h-24 rounded-md ring ring-blue-500"
+                : "col-span-1 h-24 cursor-pointer opacity-50 hover:opacity-100"
             }
             onClick={() => setCurrentImage(image)}
           >
@@ -40,6 +40,7 @@ export default function ProductImages({ images, name }: Props) {
               width={500}
               height={500}
               alt={name}
+              className="h-full w-full object-cover"
             />
           </button>
         ))}
