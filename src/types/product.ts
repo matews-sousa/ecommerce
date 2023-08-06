@@ -1,5 +1,12 @@
 import { Image } from "sanity";
 
+export interface ISize {
+  _id: string;
+  _createdAt: Date;
+  name: string;
+  value: string;
+}
+
 export interface ICategory {
   _id: string;
   _createdAt: Date;
@@ -14,6 +21,7 @@ export interface IProduct {
   name: string;
   slug: string;
   description: string;
+  sizes?: ISize[];
   category: ICategory;
   price: number;
   images: Image[];

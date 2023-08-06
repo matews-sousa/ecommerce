@@ -1,7 +1,7 @@
 import { IProduct } from "@/types/product";
 import { client } from "../../../../sanity/lib/client";
 import { groq } from "next-sanity";
-import AddToCartBtn from "@/components/add-to-cart-btn";
+import AddToCart from "@/components/add-to-cart";
 import ProductImages from "@/components/product-images";
 
 export default async function ProductPage({
@@ -10,7 +10,24 @@ export default async function ProductPage({
   params: { slug: string };
 }) {
   const product = await client.fetch<IProduct>(
-    groq`*[slug.current == "${params.slug}"][0]`
+    groq`*[slug.current == "${params.slug}"][0] {
+      _id,
+      name,
+      description,
+      price,
+      images,
+      "slug": slug.current,
+      "sizes": sizes[]->{
+        _id,
+        name,
+        value
+      },
+      category->{
+        _id,
+        name,
+        "slug": slug.current
+      }
+    }`
   );
 
   if (!product) return <h1>Not found</h1>;
@@ -30,7 +47,7 @@ export default async function ProductPage({
 
         <p className="md:text-md my-4 text-sm">{product.description}</p>
 
-        <AddToCartBtn product={product} />
+        <AddToCart product={product} />
       </div>
     </div>
   );

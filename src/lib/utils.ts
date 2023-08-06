@@ -33,7 +33,7 @@ export async function validateShoppingCart(productsJSON: CartProduct[]) {
         currency: "usd",
         unit_amount: Math.round(p.price * 100), // convert float number to int (money to centavos)
         product_data: {
-          name: p.name,
+          name: `${p.name} ${p.size ? `(${p.size})` : ""}`,
           description: p.description,
           images: [urlForImage(p.images[0]).url()],
         },

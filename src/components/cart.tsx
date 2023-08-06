@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Button } from "./ui/button";
-import { ShoppingBag, MoveRight, Loader2 } from "lucide-react";
+import { ShoppingBag, Loader2, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { Separator } from "./ui/separator";
 import CartItem from "./cart-item";
@@ -100,13 +100,14 @@ export default function Cart() {
             >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Checkout
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
             <p className="text-center">
               or
               <SheetClose asChild>
                 <Button variant="link" className="text-blue-500">
                   Continue Shopping
-                  <MoveRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </SheetClose>
             </p>

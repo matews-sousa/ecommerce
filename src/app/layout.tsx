@@ -9,8 +9,9 @@ import LayoutProvider from "./providers/LayoutProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "audiophile",
-  description: "An E-Commerce for audio related products.",
+  title: "Elysia",
+  description:
+    "Welcome to [Your E-commerce Name] – Discover a World of Exciting Products! Explore a diverse selection of premium audio equipment, trendy fashion, stylish footwear, and more. Shop with confidence and indulge in a seamless shopping experience. Find your perfect match and elevate your lifestyle today!",
 };
 
 export default function RootLayout({

@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <nav className="flex items-center justify-between border-b border-gray-200 px-12 py-4">
       <Link href="/" className="text-3xl font-extrabold">
-        audiophile
+        Elysia
       </Link>
 
       <div className="hidden lg:inline-flex">

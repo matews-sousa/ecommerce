@@ -4,6 +4,7 @@ import { IProduct } from "@/types/product";
 import { createContext, useContext, useState, useEffect } from "react";
 
 export type CartProduct = IProduct & {
+  size?: string;
   quantity: number;
 };
 
@@ -12,8 +13,8 @@ interface CartContextProps {
   cartSize: number;
   totalPrice: number;
   addProduct: (id: Omit<CartProduct, "quantity">) => void;
-  removeProduct: (id: string) => void;
-  incrementQuantity: (id: string, quantity: number) => void;
+  removeProduct: (product: CartProduct) => void;
+  incrementQuantity: (product: CartProduct, quantity: number) => void;
   clearCart: () => void;
 }
 
@@ -48,12 +49,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     : 0;
 
   const addProduct = (product: Omit<CartProduct, "quantity">) => {
-    const existingProduct = cart?.find((item) => item._id === product._id);
+    const existingProduct = cart?.find(
+      (item) => item._id === product._id && item.size === product.size
+    );
 
     if (existingProduct) {
       setCart((prev) =>
         prev.map((item) =>
-          item._id === product._id
+          item._id === product._id && item.size === product.size
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
@@ -63,23 +66,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const removeProduct = (id: string) => {
-    setCart((prev) => prev.filter((p) => p._id !== id));
+  const removeProduct = (product: CartProduct) => {
+    setCart((prev) =>
+      prev.filter((p) => !(p._id === product._id && p.size === product.size))
+    );
   };
 
-  const incrementQuantity = (id: string, quantity: number) => {
-    const product = cart.find((p) => p._id === id);
+  const incrementQuantity = (product: CartProduct, quantity: number) => {
+    const cartProduct = cart.find(
+      (p) => p._id === product._id && p.size === product.size
+    );
 
-    if (!product) return;
+    if (!cartProduct) return;
 
-    if (product?.quantity + quantity <= 0) {
-      removeProduct(id);
+    if (cartProduct?.quantity + quantity <= 0) {
+      removeProduct(cartProduct);
       return;
     }
 
     setCart((prev) => {
       return prev.map((p) => {
-        if (p._id === id) {
+        if (p._id === cartProduct._id && p.size === cartProduct.size) {
           return {
             ...p,
             quantity: p.quantity + quantity,
