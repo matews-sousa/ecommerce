@@ -34,12 +34,14 @@ export default function AddToCart({ product }: { product: IProduct }) {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="mb-4 grid max-w-md grid-cols-3 gap-2">
         {product.sizes?.map((size) => (
           <button
             key={size.value}
-            className={`rounded-md border border-gray-400 bg-gray-200 px-4 py-2 ${
-              selectedSize === size.value ? "bg-gray-900 text-white" : ""
+            className={`rounded-md border border-gray-400 bg-gray-200 px-2 py-1 text-sm font-semibold hover:bg-gray-300 md:px-4 md:py-2 ${
+              selectedSize === size.value
+                ? "bg-gray-900 text-white hover:bg-gray-900"
+                : ""
             }`}
             onClick={() => setSelectedSize(size.value)}
           >

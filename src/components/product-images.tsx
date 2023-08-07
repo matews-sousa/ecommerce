@@ -30,8 +30,8 @@ export default function ProductImages({ images, name }: Props) {
             key={image.asset?._key}
             className={
               currentImage === image
-                ? "col-span-1 h-24 rounded-md ring ring-blue-500"
-                : "col-span-1 h-24 cursor-pointer opacity-50 hover:opacity-100"
+                ? "col-span-1 h-24 overflow-hidden rounded-md ring ring-blue-500"
+                : "col-span-1 h-24 cursor-pointer overflow-hidden opacity-50 hover:opacity-100"
             }
             onClick={() => setCurrentImage(image)}
           >

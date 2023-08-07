@@ -12,7 +12,11 @@ export default function LayoutProvider({
 
   return (
     <>
-      <main className={!pathname.startsWith("/studio") ? "px-12 py-6" : ""}>
+      <main
+        className={
+          !pathname.startsWith("/studio") ? "container mx-auto p-6" : ""
+        }
+      >
         {children}
       </main>
     </>

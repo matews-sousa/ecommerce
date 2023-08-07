@@ -10,7 +10,7 @@ export default function Navbar() {
   if (pathname.startsWith("/studio")) return null;
 
   return (
-    <nav className="flex items-center justify-between border-b border-gray-200 px-12 py-4">
+    <nav className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
       <Link href="/" className="text-3xl font-extrabold">
         Elysia
       </Link>
